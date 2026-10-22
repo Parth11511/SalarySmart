@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalarySmart - Your Money Planner</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f6fc;
+      color: #1e293b;
+    }
+    header {
+      background: #123b72;
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; }
+    header p { margin: 0; color: #dbeafe; }
+    main { max-width: 760px; margin: 25px auto; padding: 0 15px; }
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px #17255412;
+    }
+    label { display: block; font-weight: bold; margin-bottom: 8px; }
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 17px;
+      margin-bottom: 16px;
+    }
+    button {
+      background: #16734b;
+      color: white;
+      border: 0;
+      border-radius: 9px;
+      padding: 14px;
+      width: 100%;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .result { display: none; }
+    .total {
+      background: #e6f7ed;
+      padding: 16px;
+      border-radius: 12px;
+      color: #12633d;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .item span:last-child { font-weight: bold; white-space: nowrap; }
+    .note { font-size: 13px; line-height: 1.6; color: #64748b; }
+    footer { text-align: center; padding: 20px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💰 SalarySmart</h1>
+    <p>Your salary, your budget, your future.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Plan Your Monthly Salary</h2>
+      <p>Enter your monthly take-home salary to create a sample budget.</p>
+      <label for="salary">Monthly salary (₹)</label>
+      <input id="salary" type="number" min="1" max="100000000"
+        value="50000" placeholder="Example: 50000">
+
+      <label for="rent">Monthly rent / housing cost (₹)</label>
+      <input id="rent" type="number" min="0" max="100000000" value="8000">
+
+      <label for="existing">Existing monthly loan EMIs (₹)</label>
+      <input id="existing" type="number" min="0" max="100000000" value="0">
+
+      <button onclick="calculateBudget()">Calculate My Budget</button>
+    </section>
+
+    <section class="card result" id="result" aria-live="polite">
+      <h2>Your Monthly Budget</h2>
+      <div class="total">
+        <div>Monthly salary</div>
+        <h2 id="totalSalary">₹50,000</h2>
+      </div>
+      <div id="budgetRows"></div>
+      <h3 id="remaining"></h3>
+      <p class="note">
+        This is an illustrative starting budget, not personal financial advice.
+        Actual costs depend on your household and location. Loan eligibility,
+        interest rates and other EMIs must be considered before borrowing.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>🏦 Loan EMI Calculator</h2>
+      <label for="loan">Loan amount (₹)</label>
+      <input id="loan" type="number" min="1" max="1000000000" value="300000">
+
+      <label for="rate">Annual interest rate (%)</label>
+      <input id="rate" type="number" min="0" max="100" step="0.1" value="12">
+
+      <label for="years">Loan duration (years)</label>
+      <input id="years" type="number" min="1" max="40" value="3">
+
+      <button onclick="calculateEMI()">Calculate EMI</button>
+      <div id="emiResult" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>SalarySmart · Plan wisely, save regularly.</footer>
+
+  <script>
+    const money = n => "₹" + Math.round(n).toLocaleString("en-IN");
+
+    function calculateBudget() {
+      const salary = Number(document.getElementById("salary").value);
+      const rent = Number(document.getElementById("rent").value);
+      const existing = Number(document.getElementById("existing").value);
+
+      if (!Number.isFinite(salary) || salary <= 0 ||
+          salary > 100000000 || rent < 0 || existing < 0 ||
+          rent > 100000000 || existing > 100000000) {
+        alert("Please enter valid salary and expense amounts.");
+        return;
+      }
+
+      const available = salary - rent - existing;
+      const rows = [
+        ["Rent / housing", rent],
+        ["Groceries and household needs", salary * 0.20],
+        ["Electricity, phone and bills", salary * 0.07],
+        ["Travel", salary * 0.08],
+        ["Savings and emergency fund", salary * 0.15],
+        ["Personal and health expenses", salary * 0.10],
+        ["Existing loan EMIs", existing]
+      ];
+
+      // Keep suggested new EMI within remaining money.
+      const otherCosts = rows.reduce((sum, row) => sum + row[1], 0);
+      const newEMI = Math.max(0, Math.min(
+        salary * 0.15,
+        salary - otherCosts
+      ));
+      rows.push(["Possible additional EMI budget", newEMI]);
+
+      const planned = rows.reduce((sum, row) => sum + row[1], 0);
+      const leftover = salary - planned;
+
+      document.getElementById("totalSalary").textContent = money(salary);
+      document.getElementById("budgetRows").innerHTML = rows.map(row =>
+        `<div class="item"><span>${row[0]}</span><span>${money(row[1])}</span></div>`
+      ).join("");
+
+      document.getElementById("remaining").textContent =
+        "Unallocated money: " + money(leftover);
+      document.getElementById("result").style.display = "block";
+    }
+
+    function calculateEMI() {
+      const principal = Number(document.getElementById("loan").value);
+      const annualRate = Number(document.getElementById("rate").value);
+      const years = Number(document.getElementById("years").value);
+
+      if (!Number.isFinite(principal) || principal <= 0 ||
+          principal > 1000000000 || !Number.isFinite(annualRate) ||
+          annualRate < 0 || annualRate > 100 ||
+          !Number.isFinite(years) || years < 1 || years > 40) {
+        alert("Please enter valid loan details.");
+        return;
+      }
+
+      const months = years * 12;
+      const r = annualRate / 1200;
+      const emi = r === 0
+        ? principal / months
+        : principal * r * Math.pow(1 + r, months) /
+          (Math.pow(1 + r, months) - 1);
+
+      const total = emi * months;
+      document.getElementById("emiResult").innerHTML =
+        `<div class="total">
+          <h3>Monthly EMI: ${money(emi)}</h3>
+          <p>Total repayment: ${money(total)}</p>
+          <p>Total interest: ${money(total - principal)}</p>
+        </div>`;
+    }
+
+    calculateBudget();
+    calculateEMI();
+  </script>
+</body>
+</html>
