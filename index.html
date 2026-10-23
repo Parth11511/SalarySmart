@@ -226,23 +226,7 @@ function calculateBudget() {
     calculateBudget();
     calculateEMI();
     
-function calculateGoal() {
-  const target = Number(document.getElementById("goalAmount").value);
-  const saved = Number(document.getElementById("savedAmount").value);
-  const months = Number(document.getElementById("goalMonths").value);
-  const output = document.getElementById("goalResult");
 
-  if (
-    !Number.isFinite(target) ||
-    !Number.isFinite(saved) ||
-    !Number.isFinite(months) ||
-    target <= 0 ||
-    target > 1000000000 ||
-    saved < 0 ||
-    saved > target ||
-    months < 1 ||
-    months > 600 ||
-    !Number.isInteger(months)
  
 
   </script>
