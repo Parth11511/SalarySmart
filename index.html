@@ -128,6 +128,27 @@
       <button onclick="calculateEMI()">Calculate EMI</button>
       <div id="emiResult" aria-live="polite"></div>
     </section>
+    
+<section class="card" id="savings-tracker">
+  <h2>🎯 Savings Goal Tracker</h2>
+  <p>Set a savings goal and track your progress.</p>
+
+  <label for="savingsGoal">Your savings goal (₹)</label>
+  <input id="savingsGoal" type="number" min="1"
+    placeholder="Example: 10000" value="10000">
+
+  <label for="savedAmount">Amount already saved (₹)</label>
+  <input id="savedAmount" type="number" min="0"
+    placeholder="Example: 2000" value="2000">
+
+  <button type="button" onclick="trackSavings()">
+    Track My Savings
+  </button>
+
+  <div id="savingsResult" aria-live="polite"
+    style="margin-top: 18px;" hidden></div>
+</section>
+
   </main>
   
 
@@ -232,6 +253,35 @@ function calculateBudget() {
 
     calculateBudget();
     calculateEMI();
+    
+function trackSavings() {
+  const goal = Number(document.getElementById("savingsGoal").value);
+  const saved = Number(document.getElementById("savedAmount").value);
+  const result = document.getElementById("savingsResult");
+
+  if (!Number.isFinite(goal) || !Number.isFinite(saved) ||
+      goal <= 0 || saved < 0) {
+    result.hidden = false;
+    result.textContent = "Please enter a valid goal and savings amount.";
+    return;
+  }
+
+  const remaining = Math.max(0, goal - saved);
+  const progress = Math.min(100, (saved / goal) * 100);
+
+  result.hidden = false;
+  result.innerHTML = `
+    <h3>Your Savings Progress</h3>
+    <p>Goal: ₹${goal.toLocaleString("en-IN")}</p>
+    <p>Already saved: ₹${saved.toLocaleString("en-IN")}</p>
+    <p>Amount remaining: ₹${remaining.toLocaleString("en-IN")}</p>
+    <div style="background:#e2e8f0;border-radius:10px;overflow:hidden;height:18px;">
+      <div style="background:#16734b;width:${progress}%;height:18px;"></div>
+    </div>
+    <p>${progress.toFixed(1)}% completed</p>
+  `;
+}
+
     
 
  
