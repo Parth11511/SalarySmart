@@ -129,49 +129,70 @@
   <script>
     const money = n => "₹" + Math.round(n).toLocaleString("en-IN");
 
-    function calculateBudget() {
-      const salary = Number(document.getElementById("salary").value);
-      const rent = Number(document.getElementById("rent").value);
-      const existing = Number(document.getElementById("existing").value);
+    
+function calculateBudget() {
+  const salary = Number(document.getElementById("salary").value);
+  const rent = Number(document.getElementById("rent").value);
+  const existing = Number(document.getElementById("existing").value);
 
-      if (!Number.isFinite(salary) || salary <= 0 ||
-          salary > 100000000 || rent < 0 || existing < 0 ||
-          rent > 100000000 || existing > 100000000) {
-        alert("Please enter valid salary and expense amounts.");
-        return;
-      }
+  if (
+    !Number.isFinite(salary) ||
+    !Number.isFinite(rent) ||
+    !Number.isFinite(existing) ||
+    salary <= 0 ||
+    salary > 100000000 ||
+    rent < 0 ||
+    rent > salary ||
+    existing < 0 ||
+    existing > salary
+  ) {
+    alert("Please enter valid salary, rent and existing EMI amounts.");
+    return;
+  }
 
-      const available = salary - rent - existing;
-      const rows = [
-        ["Rent / housing", rent],
-        ["Groceries and household needs", salary * 0.20],
-        ["Electricity, phone and bills", salary * 0.07],
-        ["Travel", salary * 0.08],
-        ["Savings and emergency fund", salary * 0.15],
-        ["Personal and health expenses", salary * 0.10],
-        ["Existing loan EMIs", existing]
-      ];
+  // Illustrative starting estimates, not fixed financial rules.
+  const groceries = salary * 0.18;
+  const bills = salary * 0.06;
+  const travel = salary * 0.08;
+  const personal = salary * 0.08;
+  const savings = salary * 0.15;
 
-      // Keep suggested new EMI within remaining money.
-      const otherCosts = rows.reduce((sum, row) => sum + row[1], 0);
-      const newEMI = Math.max(0, Math.min(
-        salary * 0.15,
-        salary - otherCosts
-      ));
-      rows.push(["Possible additional EMI budget", newEMI]);
+  const essentialCosts = rent + groceries + bills + travel + personal;
+  const availableForEMI = Math.max(0, salary - essentialCosts - savings - existing);
 
-      const planned = rows.reduce((sum, row) => sum + row[1], 0);
-      const leftover = salary - planned;
+  // Keep total EMIs within 20% of salary and within remaining budget.
+  const totalEMILimit = salary * 0.20;
+  const newEMI = Math.max(
+    0,
+    Math.min(availableForEMI, totalEMILimit - existing)
+  );
 
-      document.getElementById("totalSalary").textContent = money(salary);
-      document.getElementById("budgetRows").innerHTML = rows.map(row =>
-        `<div class="item"><span>${row[0]}</span><span>${money(row[1])}</span></div>`
-      ).join("");
+  const totalEMI = existing + newEMI;
+  const leftover =
+    salary - rent - groceries - bills - travel - personal - savings - totalEMI;
 
-      document.getElementById("remaining").textContent =
-        "Unallocated money: " + money(leftover);
-      document.getElementById("result").style.display = "block";
-    }
+  const rows = [
+    ["Rent / housing", rent],
+    ["Groceries and household needs", groceries],
+    ["Electricity, phone and bills", bills],
+    ["Travel", travel],
+    ["Personal and health expenses", personal],
+    ["Savings and emergency fund", savings],
+    ["Suggested additional monthly EMI", newEMI],
+    ["Existing EMI + suggested new EMI total", totalEMI]
+  ];
+
+  document.getElementById("totalSalary").textContent = money(salary);
+  document.getElementById("budgetRows").innerHTML = rows.map(row =>
+    `<div class="item"><span>${row[0]}</span><span>${money(row[1])}</span></div>`
+  ).join("");
+
+  document.getElementById("remaining").textContent =
+    "Salary remaining after expenses and EMIs: " + money(leftover);
+
+  document.getElementById("result").style.display = "block";
+}
+
 
     function calculateEMI() {
       const principal = Number(document.getElementById("loan").value);
