@@ -148,6 +148,36 @@
   <div id="savingsResult" aria-live="polite"
     style="margin-top: 18px;" hidden></div>
 </section>
+    
+<section class="card" id="expense-tracker">
+  <h2>🧾 Expense Tracker</h2>
+  <p>Add your daily expenses and track your total spending.</p>
+
+  <label for="expenseName">Expense name</label>
+  <input id="expenseName" type="text" placeholder="Example: Food, Travel">
+
+  <label for="expenseAmount">Amount (₹)</label>
+  <input id="expenseAmount" type="number" min="0.01" step="0.01"
+    placeholder="Example: 150">
+
+  <label for="expenseCategory">Category</label>
+  <select id="expenseCategory"
+    style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;font-size:16px;margin-bottom:16px;">
+    <option value="Food">Food</option>
+    <option value="Travel">Travel</option>
+    <option value="Shopping">Shopping</option>
+    <option value="Bills">Bills</option>
+    <option value="Health">Health</option>
+    <option value="Other">Other</option>
+  </select>
+
+  <button type="button" onclick="addExpense()">Add Expense</button>
+
+  <h3 style="margin-top:22px;">Total Expenses: <span id="expenseTotal">₹0.00</span></h3>
+  <p id="expenseMessage" role="status" aria-live="polite"></p>
+  <ul id="expenseList" style="padding-left:20px;"></ul>
+</section>
+
 
   </main>
   
@@ -280,6 +310,78 @@ function trackSavings() {
     </div>
     <p>${progress.toFixed(1)}% completed</p>
   `;
+}
+
+let expenses = [];
+
+function addExpense() {
+  const nameInput = document.getElementById("expenseName");
+  const amountInput = document.getElementById("expenseAmount");
+  const categoryInput = document.getElementById("expenseCategory");
+  const message = document.getElementById("expenseMessage");
+
+  const name = nameInput.value.trim();
+  const amount = Number(amountInput.value);
+  const category = categoryInput.value;
+
+  if (!name || amountInput.value.trim() === "" ||
+      !Number.isFinite(amount) || amount <= 0) {
+    message.textContent = "Please enter an expense name and a valid amount.";
+    return;
+  }
+
+  expenses.push({
+    id: Date.now() + Math.random(),
+    name: name,
+    amount: amount,
+    category: category
+  });
+
+  nameInput.value = "";
+  amountInput.value = "";
+
+  renderExpenses();
+  message.textContent = "Expense added successfully!";
+}
+
+function deleteExpense(id) {
+  expenses = expenses.filter(expense => expense.id !== id);
+  renderExpenses();
+}
+
+function renderExpenses() {
+  const list = document.getElementById("expenseList");
+  const totalElement = document.getElementById("expenseTotal");
+
+  list.replaceChildren();
+
+  const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+  totalElement.textContent = total.toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR"
+  });
+
+  expenses.forEach(expense => {
+    const item = document.createElement("li");
+    item.style.marginBottom = "12px";
+
+    const details = document.createElement("span");
+    details.textContent =
+      `${expense.name} (${expense.category}) — ₹${expense.amount.toLocaleString("en-IN")}`;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.textContent = "Delete";
+    deleteButton.style.width = "auto";
+    deleteButton.style.padding = "8px 12px";
+    deleteButton.style.marginLeft = "10px";
+    deleteButton.style.background = "#b91c1c";
+    deleteButton.onclick = () => deleteExpense(expense.id);
+
+    item.append(details, deleteButton);
+    list.appendChild(item);
+  });
 }
 
     
