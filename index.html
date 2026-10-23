@@ -122,6 +122,30 @@
       <div id="emiResult" aria-live="polite"></div>
     </section>
   </main>
+  
+<section class="card">
+  <h2>🎯 Savings Goal Planner</h2>
+  <p>Plan how much you need to save each month.</p>
+
+  <label for="goalAmount">Your savings target (₹)</label>
+  <input id="goalAmount" type="number" min="1"
+    max="1000000000" value="12000">
+
+  <label for="savedAmount">Already saved (₹)</label>
+  <input id="savedAmount" type="number" min="0"
+    max="1000000000" value="2000">
+
+  <label for="goalMonths">Reach your goal in (months)</label>
+  <input id="goalMonths" type="number" min="1"
+    max="600" value="10">
+
+  <button onclick="calculateGoal()">
+    Calculate Monthly Savings
+  </button>
+
+  <div id="goalResult" aria-live="polite"></div>
+</section>
+
 
   <footer>SalarySmart · Plan wisely, save regularly.</footer>
 
@@ -203,6 +227,46 @@
 
     calculateBudget();
     calculateEMI();
+    
+function calculateGoal() {
+  const target = Number(document.getElementById("goalAmount").value);
+  const saved = Number(document.getElementById("savedAmount").value);
+  const months = Number(document.getElementById("goalMonths").value);
+  const output = document.getElementById("goalResult");
+
+  if (
+    !Number.isFinite(target) ||
+    !Number.isFinite(saved) ||
+    !Number.isFinite(months) ||
+    target <= 0 ||
+    target > 1000000000 ||
+    saved < 0 ||
+    saved > target ||
+    months < 1 ||
+    months > 600 ||
+    !Number.isInteger(months)
+  ) {
+    alert("Please enter valid savings goal details.");
+    return;
+  }
+
+  const remaining = target - saved;
+  const monthly = remaining / months;
+
+  output.innerHTML = `
+    <div class="total" style="margin-top:16px">
+      <h3>Monthly Savings Target</h3>
+      <h2>${money(monthly)}</h2>
+      <p>Goal: ${money(target)}</p>
+      <p>Already saved: ${money(saved)}</p>
+      <p>Still needed: ${money(remaining)}</p>
+      <p>Save this amount each month to reach your target on time.</p>
+    </div>
+  `;
+}
+
+calculateGoal();
+
   </script>
 </body>
 </html>
