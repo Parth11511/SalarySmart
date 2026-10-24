@@ -179,21 +179,30 @@
 <p>Unlock Smart Savings Goals with SalarySmart Premium.</p>
 <a href="premium.html" class="button">Upgrade to Premium — ₹69/month</a>
 
-  <label for="savingsGoal">Your savings goal (₹)</label>
-  <input id="savingsGoal" type="number" min="1"
-    placeholder="Example: 10000" value="10000">
 
-  <label for="savedAmount">Amount already saved (₹)</label>
-  <input id="savedAmount" type="number" min="0"
-    placeholder="Example: 2000" value="2000">
+  <div id="savingsLockedContent" style="position: relative;">
+    <div style="filter: blur(4px); opacity: 0.6; pointer-events: none;">
+      <label for="savingsGoal">Your savings goal (₹)</label>
+      <input id="savingsGoal" type="number" min="1"
+        placeholder="Example: 10000" value="10000" disabled>
 
-  <button type="button" onclick="trackSavings()">
-    Track My Savings
-  </button>
+      <label for="savedAmount">Amount already saved (₹)</label>
+      <input id="savedAmount" type="number" min="0"
+        placeholder="Example: 2000" value="2000" disabled>
 
-  <div id="savingsResult" aria-live="polite"
-    style="margin-top: 18px;" hidden></div>
+      <button type="button" disabled>Track My Savings</button>
+      <div id="savingsResult" aria-live="polite"
+        style="margin-top: 18px;" hidden></div>
+    </div>
+
+    <div style="text-align: center; padding: 16px;">
+      <h3>🔒 Premium Feature</h3>
+      <p>Unlock Smart Savings Goals with SalarySmart Premium.</p>
+      <a href="premium.html" class="button">Upgrade to Premium — ₹69/month</a>
+    </div>
+  </div>
 </section>
+
     
 <section class="card" id="expense-tracker">
   <h2>🧾 Expense Tracker</h2>
