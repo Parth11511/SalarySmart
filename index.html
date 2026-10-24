@@ -296,31 +296,25 @@
 </section>
 
     
+
 <section class="card" id="emergency-fund-planner">
   <h2>🛡️ Emergency Fund Planner</h2>
-  <p><strong>PREMIUM FEATURE</strong></p>
+  <p><strong>🔒 PREMIUM FEATURE</strong></p>
   <p>Estimate how much you may need for essential expenses during an emergency.</p>
 
-  <label for="essentialExpenses">Monthly essential expenses (₹)</label>
-  <input id="essentialExpenses" type="number" min="1"
-    placeholder="Example: 15000">
+  <div style="position: relative; min-height: 120px;">
+    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
+      <p>Monthly Essential Expenses: ₹XXXX</p>
+      <p>Emergency Fund Target: ₹XXXX</p>
+      <p>Current Savings: ₹XXXX</p>
+      <p>Additional Savings Needed: ₹XXXX</p>
+    </div>
 
-  <label for="currentEmergencySavings">Current emergency savings (₹)</label>
-  <input id="currentEmergencySavings" type="number" min="0"
-    placeholder="Example: 10000" value="0">
-
-  <label for="emergencyMonths">Emergency fund duration</label>
-  <select id="emergencyMonths">
-    <option value="3">3 months</option>
-    <option value="6" selected>6 months</option>
-    <option value="12">12 months</option>
-  </select>
-
-  <button type="button" onclick="calculateEmergencyFund()">
-    Calculate Emergency Fund
-  </button>
-
-  <div id="emergencyFundResult" aria-live="polite"></div>
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
+      <p><strong>🔒 Unlock Emergency Fund Planner</strong></p>
+      <a href="premium.html">Upgrade to Premium</a>
+    </div>
+  </div>
 </section>
 
 
