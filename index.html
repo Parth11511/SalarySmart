@@ -231,6 +231,19 @@
 
   <div id="expenseInsightsResult" aria-live="polite"></div>
 </section>
+    
+<section class="card" id="budget-vs-actual">
+  <h2>📊 Budget vs Actual Spending</h2>
+  <p><strong>PREMIUM FEATURE</strong></p>
+  <p>Compare your planned budget with your actual expenses.</p>
+
+  <div id="budgetComparisonResult" aria-live="polite"></div>
+
+  <button type="button" onclick="showBudgetComparison()">
+    Compare Budget and Spending
+  </button>
+</section>
+
 
   </main>
   
@@ -379,6 +392,47 @@ function showExpenseInsights() {
     </p>
   `;
 }
+    
+function showBudgetComparison() {
+  const result = document.getElementById("budgetComparisonResult");
+
+  const planned = {
+    "Food": Number(document.getElementById("salary").value) * 0.18,
+    "Travel": Number(document.getElementById("salary").value) * 0.08,
+    "Bills": Number(document.getElementById("salary").value) * 0.06
+  };
+
+  const actual = {};
+
+  expenses.forEach(expense => {
+    actual[expense.category] =
+      (actual[expense.category] || 0) + expense.amount;
+  });
+
+  if (expenses.length === 0) {
+    result.textContent = "Please add expenses first to compare your spending.";
+    return;
+  }
+
+  result.innerHTML = `
+    <h3>Budget Comparison</h3>
+    ${Object.entries(planned).map(([category, budget]) => {
+      const spent = actual[category] || 0;
+      const difference = budget - spent;
+      const status = difference >= 0 ? "Within budget" : "Over budget";
+
+      return `
+        <div style="margin:12px 0;">
+          <strong>${category}</strong>
+          <p>Planned budget: ${money(budget)}</p>
+          <p>Actual spending: ${money(spent)}</p>
+          <p>${status}: ${money(Math.abs(difference))}</p>
+        </div>
+      `;
+    }).join("")}
+  `;
+}
+
 
 
 
