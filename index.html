@@ -255,6 +255,34 @@
 
   <div id="monthlyReportResult" aria-live="polite"></div>
 </section>
+    
+<section class="card" id="emergency-fund-planner">
+  <h2>🛡️ Emergency Fund Planner</h2>
+  <p><strong>PREMIUM FEATURE</strong></p>
+  <p>Estimate how much you may need for essential expenses during an emergency.</p>
+
+  <label for="essentialExpenses">Monthly essential expenses (₹)</label>
+  <input id="essentialExpenses" type="number" min="1"
+    placeholder="Example: 15000">
+
+  <label for="currentEmergencySavings">Current emergency savings (₹)</label>
+  <input id="currentEmergencySavings" type="number" min="0"
+    placeholder="Example: 10000" value="0">
+
+  <label for="emergencyMonths">Emergency fund duration</label>
+  <select id="emergencyMonths">
+    <option value="3">3 months</option>
+    <option value="6" selected>6 months</option>
+    <option value="12">12 months</option>
+  </select>
+
+  <button type="button" onclick="calculateEmergencyFund()">
+    Calculate Emergency Fund
+  </button>
+
+  <div id="emergencyFundResult" aria-live="polite"></div>
+</section>
+
 
 
 
@@ -477,6 +505,50 @@ function generateMonthlyReport() {
     </p>
   `;
 }
+    
+function calculateEmergencyFund() {
+  const expensesInput = document.getElementById("essentialExpenses");
+  const savingsInput = document.getElementById("currentEmergencySavings");
+  const monthsInput = document.getElementById("emergencyMonths");
+  const result = document.getElementById("emergencyFundResult");
+
+  const monthlyExpenses = Number(expensesInput.value);
+  const currentSavings = Number(savingsInput.value);
+  const months = Number(monthsInput.value);
+
+  if (
+    expensesInput.value.trim() === "" ||
+    !Number.isFinite(monthlyExpenses) ||
+    monthlyExpenses <= 0 ||
+    !Number.isFinite(currentSavings) ||
+    currentSavings < 0 ||
+    ![3, 6, 12].includes(months)
+  ) {
+    result.textContent = "Please enter valid essential expenses and savings amounts.";
+    return;
+  }
+
+  const target = monthlyExpenses * months;
+  const remaining = Math.max(0, target - currentSavings);
+  const progress = Math.min(100, (currentSavings / target) * 100);
+
+  result.innerHTML = `
+    <h3>Your Emergency Fund Plan</h3>
+    <p><strong>Monthly Essential Expenses:</strong> ${money(monthlyExpenses)}</p>
+    <p><strong>Target Duration:</strong> ${months} months</p>
+    <p><strong>Recommended Fund Target:</strong> ${money(target)}</p>
+    <p><strong>Current Emergency Savings:</strong> ${money(currentSavings)}</p>
+    <p><strong>Additional Amount Needed:</strong> ${money(remaining)}</p>
+    <p><strong>Target Progress:</strong> ${progress.toFixed(1)}%</p>
+    <div style="background:#e2e8f0;border-radius:8px;height:10px;overflow:hidden;">
+      <div style="background:#16734b;width:${progress}%;height:10px;"></div>
+    </div>
+    <p style="font-size:13px;">
+      This is an estimate based on the amounts entered, not a guarantee of future expenses.
+    </p>
+  `;
+}
+
 
 
 
