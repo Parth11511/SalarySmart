@@ -289,6 +289,42 @@ function calculateBudget() {
     "Salary remaining after expenses and EMIs: " + money(leftover);
 
   document.getElementById("result").style.display = "block";
+    const breakdownItems = [
+    ["Rent / housing", rent],
+    ["Groceries", groceries],
+    ["Bills", bills],
+    ["Travel", travel],
+    ["Personal / health", personal],
+    ["Savings", savings],
+    ["Total EMI", totalEMI],
+    ["Money remaining", leftover]
+  ];
+
+  document.getElementById("budgetPercentages").innerHTML =
+    breakdownItems.map(([name, amount]) => {
+      const percentage = salary > 0
+        ? (amount / salary) * 100
+        : 0;
+
+      return `
+        <div style="margin:12px 0;">
+          <div style="display:flex;justify-content:space-between;gap:10px;">
+            <span>${name}</span>
+            <strong>${percentage.toFixed(1)}% (${money(amount)})</strong>
+          </div>
+          <div style="background:#e2e8f0;border-radius:8px;height:10px;overflow:hidden;">
+            <div style="background:#16734b;width:${Math.min(100, percentage)}%;height:10px;"></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+  const totalExpenses = rent + groceries + bills + travel + personal + totalEMI;
+
+  document.getElementById("budgetSummary").textContent =
+    `Total planned expenses and EMIs: ${money(totalExpenses)}. ` +
+    `Savings allocation: ${money(savings)}. ` +
+    `Money remaining after the plan: ${money(leftover)}.`;
 }
 
 
