@@ -274,18 +274,27 @@
   </div>
 </section>
 
-    
+
 <section class="card" id="monthly-financial-report">
   <h2>📈 Monthly Financial Report</h2>
-  <p><strong>PREMIUM FEATURE</strong></p>
+  <p><strong>🔒 PREMIUM FEATURE</strong></p>
   <p>View a summary of your income, tracked expenses, savings, and remaining money.</p>
 
-  <button type="button" onclick="generateMonthlyReport()">
-    Generate Monthly Report
-  </button>
+  <div style="position: relative; min-height: 120px;">
+    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
+      <p>Monthly Income: ₹XXXX</p>
+      <p>Tracked Expenses: ₹XXXX</p>
+      <p>Savings: ₹XXXX</p>
+      <p>Remaining Money: ₹XXXX</p>
+    </div>
 
-  <div id="monthlyReportResult" aria-live="polite"></div>
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
+      <p><strong>🔒 Unlock Monthly Financial Report</strong></p>
+      <a href="premium.html">Upgrade to Premium</a>
+    </div>
+  </div>
 </section>
+
     
 <section class="card" id="emergency-fund-planner">
   <h2>🛡️ Emergency Fund Planner</h2>
