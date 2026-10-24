@@ -234,18 +234,26 @@
 </section>
 
 
+
 <section class="card" id="premium-expense-insights">
   <h2>📊 Monthly Expense Insights</h2>
-  <p><strong>PREMIUM FEATURE</strong></p>
+  <p><strong>🔒 PREMIUM FEATURE</strong></p>
   <p>Review your spending by category and identify where most of your money goes.</p>
 
-  <button type="button" onclick="showExpenseInsights()">
-    View Expense Insights
-  </button>
+  <div style="position: relative; min-height: 100px;">
+    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
+      <p>Food: ₹XXXX</p>
+      <p>Travel: ₹XXXX</p>
+      <p>Bills: ₹XXXX</p>
+    </div>
 
-  <div id="expenseInsightsResult" aria-live="polite"></div>
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
+      <p><strong>🔒 Unlock Expense Insights</strong></p>
+      <a href="premium.html">Upgrade to Premium</a>
+    </div>
+  </div>
 </section>
-    
+
 <section class="card" id="budget-vs-actual">
   <h2>📊 Budget vs Actual Spending</h2>
   <p><strong>PREMIUM FEATURE</strong></p>
