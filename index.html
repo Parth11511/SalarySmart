@@ -254,17 +254,26 @@
   </div>
 </section>
 
+
 <section class="card" id="budget-vs-actual">
   <h2>📊 Budget vs Actual Spending</h2>
-  <p><strong>PREMIUM FEATURE</strong></p>
+  <p><strong>🔒 PREMIUM FEATURE</strong></p>
   <p>Compare your planned budget with your actual expenses.</p>
 
-  <div id="budgetComparisonResult" aria-live="polite"></div>
+  <div style="position: relative; min-height: 100px;">
+    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
+      <p>Planned Budget: ₹XXXX</p>
+      <p>Actual Spending: ₹XXXX</p>
+      <p>Budget Difference: ₹XXXX</p>
+    </div>
 
-  <button type="button" onclick="showBudgetComparison()">
-    Compare Budget and Spending
-  </button>
+    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
+      <p><strong>🔒 Unlock Budget Comparison</strong></p>
+      <a href="premium.html">Upgrade to Premium</a>
+    </div>
+  </div>
 </section>
+
     
 <section class="card" id="monthly-financial-report">
   <h2>📈 Monthly Financial Report</h2>
