@@ -243,6 +243,19 @@
     Compare Budget and Spending
   </button>
 </section>
+    
+<section class="card" id="monthly-financial-report">
+  <h2>📈 Monthly Financial Report</h2>
+  <p><strong>PREMIUM FEATURE</strong></p>
+  <p>View a summary of your income, tracked expenses, savings, and remaining money.</p>
+
+  <button type="button" onclick="generateMonthlyReport()">
+    Generate Monthly Report
+  </button>
+
+  <div id="monthlyReportResult" aria-live="polite"></div>
+</section>
+
 
 
   </main>
@@ -430,6 +443,38 @@ function showBudgetComparison() {
         </div>
       `;
     }).join("")}
+  `;
+}
+
+function generateMonthlyReport() {
+  const result = document.getElementById("monthlyReportResult");
+
+  const salary = Number(document.getElementById("salary").value) || 0;
+  const totalExpenses = expenses.reduce(
+    (sum, expense) => sum + expense.amount, 0
+  );
+
+  const savingsInput = document.getElementById("savedAmount");
+  const savings = savingsInput ? Number(savingsInput.value) || 0 : 0;
+  const remaining = salary - totalExpenses;
+
+  if (salary <= 0) {
+    result.textContent = "Please enter your monthly salary in the Budget Planner first.";
+    return;
+  }
+
+  result.innerHTML = `
+    <h3>Monthly Financial Summary</h3>
+    <p><strong>Monthly Income:</strong> ${money(salary)}</p>
+    <p><strong>Tracked Expenses:</strong> ${money(totalExpenses)}</p>
+    <p><strong>Amount Already Saved:</strong> ${money(savings)}</p>
+    <p><strong>Income After Tracked Expenses:</strong> ${money(remaining)}</p>
+    <p><strong>Expense Ratio:</strong> ${(totalExpenses / salary * 100).toFixed(1)}%</p>
+    <p><strong>Savings Goal Tracker Amount:</strong> ${money(savings)}</p>
+    <p style="font-size:13px;">
+      This report uses the salary and expenses entered on this page.
+      It is an estimate, not a bank statement.
+    </p>
   `;
 }
 
