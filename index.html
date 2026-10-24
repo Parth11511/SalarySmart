@@ -170,6 +170,7 @@
     </section>
     
 <section class="card" id="savings-tracker">
+  <p><strong>PREMIUM FEATURE</strong></p>
   <h2>🎯 Savings Goal Tracker</h2>
   <p>Set a savings goal and track your progress.</p>
 
@@ -218,6 +219,18 @@
   <ul id="expenseList" style="padding-left:20px;"></ul>
 </section>
 
+
+<section class="card" id="premium-expense-insights">
+  <h2>📊 Monthly Expense Insights</h2>
+  <p><strong>PREMIUM FEATURE</strong></p>
+  <p>Review your spending by category and identify where most of your money goes.</p>
+
+  <button type="button" onclick="showExpenseInsights()">
+    View Expense Insights
+  </button>
+
+  <div id="expenseInsightsResult" aria-live="polite"></div>
+</section>
 
   </main>
   
@@ -326,6 +339,47 @@ function calculateBudget() {
     `Savings allocation: ${money(savings)}. ` +
     `Money remaining after the plan: ${money(leftover)}.`;
 }
+
+
+function showExpenseInsights() {
+  const result = document.getElementById("expenseInsightsResult");
+
+  if (expenses.length === 0) {
+    result.textContent = "Please add expenses first to view your insights.";
+    return;
+  }
+
+  const totals = {};
+
+  expenses.forEach(expense => {
+    totals[expense.category] =
+      (totals[expense.category] || 0) + expense.amount;
+  });
+
+  const total = expenses.reduce(
+    (sum, expense) => sum + expense.amount, 0
+  );
+
+  const highest = Object.entries(totals).sort(
+    (a, b) => b[1] - a[1]
+  )[0];
+
+  result.innerHTML = `
+    <h3>Spending by Category</h3>
+    ${Object.entries(totals).map(([category, amount]) => `
+      <p>
+        <strong>${category}:</strong>
+        ${money(amount)}
+        (${(amount / total * 100).toFixed(1)}%)
+      </p>
+    `).join("")}
+    <p><strong>Total Tracked Spending:</strong> ${money(total)}</p>
+    <p><strong>Highest Spending Category:</strong>
+      ${highest[0]} (${money(highest[1])})
+    </p>
+  `;
+}
+
 
 
     function calculateEMI() {
