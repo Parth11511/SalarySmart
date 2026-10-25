@@ -1,0 +1,148 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - SalarySmart</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+    header {
+      background: #173b6c;
+      color: white;
+      text-align: center;
+      padding: 24px 12px;
+    }
+    .container {
+      max-width: 420px;
+      margin: 35px auto;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px #00000010;
+    }
+    h2 { color: #173b6c; text-align: center; }
+    label { display: block; margin-top: 15px; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 7px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border: 0;
+      border-radius: 6px;
+      background: #173b6c;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    a { color: #173b6c; }
+    p { line-height: 1.5; }
+    #message { overflow-wrap: anywhere; }
+    .center { text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SalarySmart</h1>
+    <p>Your salary, your budget, your future.</p>
+  </header>
+
+  <main class="container">
+    <h2>Create Your Account</h2>
+
+    <form id="signup-form">
+      <label for="email">Email address</label>
+      <input id="email" type="email" autocomplete="email"
+             required placeholder="Enter your email">
+
+      <label for="password">Password (minimum 6 characters)</label>
+      <input id="password" type="password"
+             autocomplete="new-password" minlength="6"
+             required placeholder="Create a password">
+
+      <button id="signup-button" type="submit">Create Account</button>
+    </form>
+
+    <p id="message" role="status" aria-live="polite"></p>
+
+    <p class="center">
+      Already have an account?
+      <a href="login.html">Login here</a>
+    </p>
+    <p class="center"><a href="index.html">Back to Home</a></p>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword
+    } from
+      "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+    const firebaseConfig = {
+ apiKey: "AIzaSyDKGWC3fTfDoC-RhMC0tGUNDkx98u0SRsU",
+      authDomain: "salarysmart.firebaseapp.com",
+      projectId: "salarysmart",
+      storageBucket: "salarysmart.firebasestorage.app",
+      messagingSenderId: "730494116667",
+      appId: "1:730494116667:web:ede99121995f920a910d1e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const form = document.getElementById("signup-form");
+    const message = document.getElementById("message");
+    const button = document.getElementById("signup-button");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "";
+      button.disabled = true;
+      button.textContent = "Creating account...";
+
+      try {
+        await createUserWithEmailAndPassword(
+          auth,
+          document.getElementById("email").value.trim(),
+          document.getElementById("password").value
+        );
+
+        message.textContent =
+          "Account created successfully! You can now log in.";
+        form.reset();
+      } catch (error) {
+        if (error.code === "auth/email-already-in-use") {
+          message.textContent = "This email already has an account. Please log in.";
+        } else if (error.code === "auth/weak-password") {
+          message.textContent = "Please choose a stronger password.";
+        } else if (error.code === "auth/operation-not-allowed") {
+          message.textContent =
+            "Email/Password sign-up is disabled in Firebase Authentication settings.";
+        } else {
+          message.textContent =
+            "Account creation failed. Check your email and Firebase settings.";
+        }
+      } finally {
+        button.disabled = false;
+        button.textContent = "Create Account";
+      }
+    });
+  </script>
+</body>
+</html>
+```
