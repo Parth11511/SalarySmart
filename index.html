@@ -95,6 +95,38 @@
   </style>
 </head>
 <body>
+  <script type="module">
+  import { initializeApp } from
+    "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+  import {
+    getAuth,
+    onAuthStateChanged
+  } from
+    "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+  const firebaseConfig = {
+   apiKey: "AIzaSyDKGWC3fTfDoC-RhMC0tGUNDkx98u0SRsU",
+    authDomain: "salarysmart.firebaseapp.com",
+    projectId: "salarysmart",
+    storageBucket: "salarysmart.firebasestorage.app",
+    messagingSenderId: "730494116667",
+    appId: "1:730494116667:web:ede99121995f920a910d1e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.body.style.display = "none";
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.body.style.display = "";
+    } else {
+      window.location.replace("login.html");
+    }
+  });
+</script>
   
 <nav class="main-menu">
   <a href="index.html">Home</a>
