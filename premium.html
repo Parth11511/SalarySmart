@@ -206,7 +206,7 @@
 <script type="module">
 import { initializeApp } from
   "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getAuth } from
+import { getAuth, onAuthStateChanged } from
   "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -220,18 +220,31 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+ 
 
 const workerURL =
   "https://salarysmart-payment.parththakor673.workers.dev";
 
 const button = document.getElementById("pay-button");
 const message = document.getElementById("payment-message");
+  onAuthStateChanged(auth, (user) => {
+  if (user) {
+    message.textContent = "Logged in successfully.";
+  } else {
+    message.textContent = "Please log in first.";
+  }
+});
 
 button.addEventListener("click", async () => {
-  const user = auth.currentUser;
+  const user = await new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      unsubscribe();
+      resolve(currentUser);
+    });
+  });
 
   if (!user) {
-    message.textContent = "Please log in first.";
+    message.textContent = "Please log in first. Open login.html and log in again.";
     return;
   }
 
