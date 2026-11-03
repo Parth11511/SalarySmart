@@ -95,44 +95,13 @@
   </style>
 </head>
 <body>
-  <script type="module">
-  import { initializeApp } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-
-  import {
-    getAuth,
-    onAuthStateChanged
-  } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-
-  const firebaseConfig = {
-   apiKey: "AIzaSyDKGWC3fTfDoC-RhMC0tGUNDkx98u0SRsU",
-    authDomain: "salarysmart.firebaseapp.com",
-    projectId: "salarysmart",
-    storageBucket: "salarysmart.firebasestorage.app",
-    messagingSenderId: "730494116667",
-    appId: "1:730494116667:web:ede99121995f920a910d1e"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  document.body.style.display = "none";
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      document.body.style.display = "";
-    } else {
-      window.location.replace("login.html");
-    }
-  });
-</script>
+ 
   
 <nav class="main-menu">
   <a href="index.html">Home</a>
   <a href="about.html">About Us</a>
   <a href="contact.html">Contact</a>
-  <a href="premium.html">Premium</a>
+
 </nav>
 
 
@@ -170,10 +139,8 @@
         <h2 id="totalSalary">₹50,000</h2>
       </div>
       <div id="budgetRows"></div>
-      <div class="card" id="advancedBreakdown">
- <h3>🔒 Advanced Budget Breakdown — Premium</h3>
-        <p>Unlock this feature with SalarySmart Premium.</p>
-<a href="premium.html" class="button">Upgrade to Premium — ₹69/month</a>
+    <div class="card" id="advancedBreakdown">
+  <h3>📊 Advanced Budget Breakdown</h3>
   <p>See how your monthly salary is distributed.</p>
 
   <div id="budgetPercentages"></div>
@@ -203,36 +170,25 @@
       <div id="emiResult" aria-live="polite"></div>
     </section>
     
-<section class="card" id="savings-tracker">
 
+<section class="card" id="savings-tracker">
   <h2>🎯 Savings Goal Tracker</h2>
   <p>Set a savings goal and track your progress.</p>
- <p><strong>PREMIUM FEATURE 🔒</strong></p>
-<p>Unlock Smart Savings Goals with SalarySmart Premium.</p>
-<a href="premium.html" class="button">Upgrade to Premium — ₹69/month</a>
 
+  <label for="savingsGoal">Your savings goal (₹)</label>
+  <input id="savingsGoal" type="number" min="1"
+    placeholder="Example: 10000" value="10000">
 
-  <div id="savingsLockedContent" style="position: relative;">
-    <div style="filter: blur(4px); opacity: 0.6; pointer-events: none;">
-      <label for="savingsGoal">Your savings goal (₹)</label>
-      <input id="savingsGoal" type="number" min="1"
-        placeholder="Example: 10000" value="10000" disabled>
+  <label for="savedAmount">Amount already saved (₹)</label>
+  <input id="savedAmount" type="number" min="0"
+    placeholder="Example: 2000" value="2000">
 
-      <label for="savedAmount">Amount already saved (₹)</label>
-      <input id="savedAmount" type="number" min="0"
-        placeholder="Example: 2000" value="2000" disabled>
+  <button type="button" onclick="trackSavings()">
+    Track My Savings
+  </button>
 
-      <button type="button" disabled>Track My Savings</button>
-      <div id="savingsResult" aria-live="polite"
-        style="margin-top: 18px;" hidden></div>
-    </div>
-
-    <div style="text-align: center; padding: 16px;">
-      <h3>🔒 Premium Feature</h3>
-      <p>Unlock Smart Savings Goals with SalarySmart Premium.</p>
-      <a href="premium.html" class="button">Upgrade to Premium — ₹69/month</a>
-    </div>
-  </div>
+  <div id="savingsResult" aria-live="polite"
+    style="margin-top:18px;" hidden></div>
 </section>
 
     
@@ -267,87 +223,75 @@
 
 
 
-<section class="card" id="premium-expense-insights">
+
+<section class="card" id="expense-insights">
   <h2>📊 Monthly Expense Insights</h2>
-  <p><strong>🔒 PREMIUM FEATURE</strong></p>
-  <p>Review your spending by category and identify where most of your money goes.</p>
+  <p>See how much money you spend in each category.</p>
 
-  <div style="position: relative; min-height: 100px;">
-    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
-      <p>Food: ₹XXXX</p>
-      <p>Travel: ₹XXXX</p>
-      <p>Bills: ₹XXXX</p>
-    </div>
+  <button type="button" onclick="showExpenseInsights()">
+    View Expense Insights
+  </button>
 
-    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
-      <p><strong>🔒 Unlock Expense Insights</strong></p>
-      <a href="premium.html">Upgrade to Premium</a>
-    </div>
-  </div>
+  <div id="expenseInsightsResult" style="margin-top:18px;"
+    aria-live="polite"></div>
 </section>
+
+
 
 
 <section class="card" id="budget-vs-actual">
   <h2>📊 Budget vs Actual Spending</h2>
-  <p><strong>🔒 PREMIUM FEATURE</strong></p>
   <p>Compare your planned budget with your actual expenses.</p>
 
-  <div style="position: relative; min-height: 100px;">
-    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
-      <p>Planned Budget: ₹XXXX</p>
-      <p>Actual Spending: ₹XXXX</p>
-      <p>Budget Difference: ₹XXXX</p>
-    </div>
+  <button type="button" onclick="showBudgetComparison()">
+    Compare My Spending
+  </button>
 
-    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
-      <p><strong>🔒 Unlock Budget Comparison</strong></p>
-      <a href="premium.html">Upgrade to Premium</a>
-    </div>
-  </div>
+  <div id="budgetComparisonResult"
+    style="margin-top:18px;" aria-live="polite"></div>
 </section>
+
+
 
 
 <section class="card" id="monthly-financial-report">
   <h2>📈 Monthly Financial Report</h2>
-  <p><strong>🔒 PREMIUM FEATURE</strong></p>
-  <p>View a summary of your income, tracked expenses, savings, and remaining money.</p>
+  <p>View a summary of your income, tracked expenses, and savings.</p>
 
-  <div style="position: relative; min-height: 120px;">
-    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
-      <p>Monthly Income: ₹XXXX</p>
-      <p>Tracked Expenses: ₹XXXX</p>
-      <p>Savings: ₹XXXX</p>
-      <p>Remaining Money: ₹XXXX</p>
-    </div>
+  <button type="button" onclick="generateMonthlyReport()">
+    Generate Monthly Report
+  </button>
 
-    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
-      <p><strong>🔒 Unlock Monthly Financial Report</strong></p>
-      <a href="premium.html">Upgrade to Premium</a>
-    </div>
-  </div>
+  <div id="monthlyReportResult"
+    style="margin-top:18px;" aria-live="polite"></div>
 </section>
+
 
     
 
+
 <section class="card" id="emergency-fund-planner">
   <h2>🛡️ Emergency Fund Planner</h2>
-  <p><strong>🔒 PREMIUM FEATURE</strong></p>
   <p>Estimate how much you may need for essential expenses during an emergency.</p>
 
-  <div style="position: relative; min-height: 120px;">
-    <div style="filter: blur(3px); opacity: 0.6; pointer-events: none;">
-      <p>Monthly Essential Expenses: ₹XXXX</p>
-      <p>Emergency Fund Target: ₹XXXX</p>
-      <p>Current Savings: ₹XXXX</p>
-      <p>Additional Savings Needed: ₹XXXX</p>
-    </div>
+  <label for="essentialExpenses">Monthly essential expenses (₹)</label>
+  <input id="essentialExpenses" type="number" min="1" placeholder="Example: 15000">
 
-    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.75);">
-      <p><strong>🔒 Unlock Emergency Fund Planner</strong></p>
-      <a href="premium.html">Upgrade to Premium</a>
-    </div>
-  </div>
+  <label for="currentEmergencySavings">Current emergency savings (₹)</label>
+  <input id="currentEmergencySavings" type="number" min="0" placeholder="Example: 5000">
+
+  <label for="emergencyMonths">Target duration</label>
+  <select id="emergencyMonths" style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;font-size:16px;margin-bottom:16px;">
+    <option value="3">3 months</option>
+    <option value="6" selected>6 months</option>
+    <option value="12">12 months</option>
+  </select>
+
+  <button type="button" onclick="calculateEmergencyFund()">Calculate Emergency Fund</button>
+
+  <div id="emergencyFundResult" style="margin-top:18px;" aria-live="polite"></div>
 </section>
+
 
 
 
@@ -757,11 +701,7 @@ function renderExpenses() {
 
   </script>
   
-<footer>
-  <p>
-    <a href="premium.html">Explore Premium</a>
-  </p>
-</footer>
+
 
 </body>
 </html>
